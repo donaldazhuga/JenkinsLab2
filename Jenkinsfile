@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/donaldazhuga/JenkinsLab2.git'
+                git branch: 'main', url: 'https://github.com/donaldazhuga/JenkinsLab2.git'
             }
         }
         stage('Build') {
