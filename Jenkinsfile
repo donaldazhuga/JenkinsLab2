@@ -7,7 +7,7 @@ pipeline {
 
     environment {
         DOCKER_HUB_USER = 'don903' 
-        IMAGE_NAME = 'jenkinslab2'        // 🔹 Replace with your image name
+        IMAGE_NAME = 'donaldalab3'       
     }
 
     stages {
