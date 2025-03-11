@@ -5,6 +5,11 @@ pipeline {
         maven 'Maven 3.9.9'
     }
 
+    environment {
+        DOCKER_HUB_USER = 'don903' 
+        IMAGE_NAME = 'jenkinslab2'        // 🔹 Replace with your image name
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -26,21 +31,21 @@ pipeline {
 
         stage('Docker Login') {
             steps {
-                withCredentials([string(credentialsId: 'dockerhub-password', variable: 'DOCKER_HUB_PASSWORD')]) {
-                    sh 'echo $DOCKER_HUB_PASSWORD | docker login -u your-dockerhub-username --password-stdin'
+                withCredentials([string(credentialsId: 'dockerhub-token', variable: 'DOCKER_HUB_PASSWORD')]) {
+                    bat "echo %DOCKER_HUB_PASSWORD% | docker login -u %DOCKER_HUB_USER% --password-stdin"
                 }
             }
         }
 
         stage('Docker Build') {
             steps {
-                sh 'docker build -t your-dockerhub-username/your-image-name .'
+                bat "docker build -t %DOCKER_HUB_USER%/%IMAGE_NAME% ."
             }
         }
 
         stage('Docker Push') {
             steps {
-                sh 'docker push your-dockerhub-username/your-image-name'
+                bat "docker push %DOCKER_HUB_USER%/%IMAGE_NAME%"
             }
         }
 
