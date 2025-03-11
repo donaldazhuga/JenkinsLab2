@@ -1,22 +1,14 @@
-# Use an official Maven image to build the project
-FROM maven:3.8.4-openjdk-11 AS build
+# Use an official Tomcat base image
+FROM tomcat:9.0-jdk11-openjdk-slim
 
-# Set the working directory
-WORKDIR /app
+# Remove default webapps to avoid conflicts
+RUN rm -rf /usr/local/tomcat/webapps/*
 
-# Copy the pom.xml file and download project dependencies
-COPY pom.xml .
-RUN mvn dependency:go-offline
+# Copy your WAR file into the Tomcat webapps directory
+COPY target/maven-web-app-lab2-0.0.1-SNAPSHOT.war /usr/local/tomcat/webapps/app.war
 
-# Copy the source code and build the project
-COPY src ./src
-RUN mvn clean package
+# Expose the default Tomcat port
+EXPOSE 8080
 
-# Use an official OpenJDK runtime as the base image
-FROM openjdk:11-jre-slim
-
-# Copy the built application from the previous stage
-COPY --from=build /app/target/your-app.jar /app/your-app.jar
-
-# Define the command to run the application
-CMD ["java", "-jar", "/app/your-app.jar"]
+# Start Tomcat
+CMD ["catalina.sh", "run"]
