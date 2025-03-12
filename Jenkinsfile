@@ -49,12 +49,10 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
-            steps {
-                echo 'Deploying the web app...'
-                // Add deployment commands here if needed, e.g., docker run
+       stage('Deploy') {
+       steps {
+        bat "docker run -d -p 9090:9090 %DOCKER_HUB_USER%/%IMAGE_NAME%"
             }
-        }
     }
 
     post {
