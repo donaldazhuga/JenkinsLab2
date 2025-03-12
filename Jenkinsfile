@@ -49,10 +49,11 @@ pipeline {
             }
         }
 
-       stage('Deploy') {
-       steps {
-       bat "docker run -d -p 9090:8080 %DOCKER_HUB_USER%/%IMAGE_NAME%"
+        stage('Deploy') {
+            steps {
+                bat "docker run -d -p 9090:8080 %DOCKER_HUB_USER%/%IMAGE_NAME%"
             }
+        }
     }
 
     post {
@@ -63,4 +64,4 @@ pipeline {
             echo 'Pipeline failed!'
         }
     }
-}
+} // Closing brace for the pipeline block
