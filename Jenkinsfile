@@ -1,40 +1,61 @@
 pipeline {
-    agent any  // Runs on any available Jenkins agent
+    agent any
 
     tools {
-        maven 'Maven 3.9.9'  // Use the Maven you configured in Jenkins
+        maven 'Maven 3.9.9' 
+    }
+
+    environment {
+        DOCKER_HUB_USER = 'don903' 
+        IMAGE_NAME = 'donaldalab3' 
     }
 
     stages {
         stage('Checkout') {
             steps {
-                // Clones your GitHub repo
                 git branch: 'main', url: 'https://github.com/donaldazhuga/JenkinsLab2.git'
             }
         }
-        
-        stage('Build') {
+
+        stage('Build Maven Project') {
             steps {
-                // Build the Maven Web App
                 bat 'mvn clean package'
             }
         }
-        
+
         stage('Test') {
             steps {
-                // Run tests (if you have any)
                 bat 'mvn test'
+            }
+        }
+
+        stage('Docker Login') {
+            steps {
+                withCredentials([string(credentialsId: 'dockerhub-token', variable: 'DOCKER_HUB_PASSWORD')]) {
+                    bat "echo %DOCKER_HUB_PASSWORD% | docker login -u %DOCKER_HUB_USER% --password-stdin"
+                }
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                bat "docker build -t %DOCKER_HUB_USER%/%IMAGE_NAME% ."
+            }
+        }
+
+        stage('Docker Push') {
+            steps {
+                bat "docker push %DOCKER_HUB_USER%/%IMAGE_NAME%"
             }
         }
 
         stage('Deploy') {
             steps {
-                // Simulate deployment (e.g., copying the .war file)
-                echo 'Deploying the web app...'
+                bat "docker run -d -p 9090:8080 %DOCKER_HUB_USER%/%IMAGE_NAME%"
             }
         }
     }
-    
+
     post {
         success {
             echo 'Pipeline executed successfully!'
@@ -43,4 +64,4 @@ pipeline {
             echo 'Pipeline failed!'
         }
     }
-}
+} // Closing brace for the pipeline block
