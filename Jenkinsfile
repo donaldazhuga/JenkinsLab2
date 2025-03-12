@@ -2,12 +2,12 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven 3.9.9'
+        maven 'Maven 3.9.9' 
     }
 
     environment {
         DOCKER_HUB_USER = 'don903' 
-        IMAGE_NAME = 'donaldalab3'       
+        IMAGE_NAME = 'donaldalab3' 
     }
 
     stages {
@@ -52,6 +52,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying the web app...'
+                // Add deployment commands here if needed, e.g., docker run
             }
         }
     }
