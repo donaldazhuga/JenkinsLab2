@@ -50,11 +50,11 @@ pipeline {
         }
 
         stage('Deploy') {
-    steps {
+        steps {
         bat "docker run -d -p 8081:8080 %DOCKER_HUB_USER%/%IMAGE_NAME%"
-    }
-}
-
+        }
+      } 
+  }
     post {
         success {
             echo 'Pipeline executed successfully!'
