@@ -51,7 +51,7 @@ pipeline {
 
         stage('Deploy') {
         steps {
-        bat "docker run -d -p 8081:8080 %DOCKER_HUB_USER%/%IMAGE_NAME%"
+        bat "docker run -d -p 8085:8080 %DOCKER_HUB_USER%/%IMAGE_NAME%"
         }
       } 
   }
